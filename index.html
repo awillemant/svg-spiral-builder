@@ -3,8 +3,24 @@
 <head>
 	<meta charset="utf-8">
 	<style>
-		svg{
-			border:1px solid black;
+
+        body{
+            font-family:Arial;
+            font-size: 10pt;
+        }
+
+        label{
+            width:100px;
+            text-align: right;
+            display:inline-block;
+        }
+
+        img{
+            border:1px solid black;
+        }
+
+		#svgContainer{
+			display:none;
 
 		}
 	</style>
@@ -12,9 +28,22 @@
 
 <body>
     
-    <svg id="s" xmlns="http://www.w3.org/2000/svg" width="88" height="88"/>
+    
+
+    <form name="formSpiral">
+        <p><label>Thickness : </label><input name="radiusIncrement" value="5"/></p>
+        <p><label>Nb of laps : </label><input name="nbLaps" value="2"/></p>
+        <p><label>% of spacing : </label><input name="spacing" value="100"/> % </p>
+        <p><label>color : </label><input name="color" value="red"/></p>
+        <p><input type="submit" value="create spiral"/></p>
+    </form>
+
+    <div id="svgContainer"></div>
+    <div id="imageContainer"></div>
+
     
     <script type="text/javascript">
+
         function makeSVG(tag, attrs) {
             var el= document.createElementNS('http://www.w3.org/2000/svg', tag);
             for (var k in attrs)
@@ -47,21 +76,40 @@
         	return drawArc(radius,flag,endX,endY);
         }
 
+        function buildSVGSpiral(radiusIncrement,nbLaps,spacing,color){
+            var size = (radiusIncrement*4) * (nbLaps+1) * 2;
+            var svgContainer = document.getElementById("svgContainer");
+            svgContainer.innerHTML = ""       
+            
+            var svgImage= document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svgImage.setAttribute("version", 1.1)
+            svgImage.setAttribute("xmlns", "http://www.w3.org/2000/svg")
+            svgImage.setAttribute("id","svgImage");
+            svgContainer.appendChild(svgImage);
+                     
+            svgImage.setAttribute("width",size);
+            svgImage.setAttribute("height",size);
+                    
 
+            svgImage.appendChild(buildPath(radiusIncrement,nbLaps,spacing,color,size));
+        }
        
 
-        function buildPath(startPoint,radiusIncrement,nbSpires,ecartement){
+        function buildPath(radiusIncrement,nbLaps,spacing,color,size){
    	
+            var startPoint = size/2
+
 	       	var path = "M "+startPoint+" "+startPoint+" ";
 
-        	for(var i=0; i<nbSpires ; i++){
+
+        	for(var i=0; i<nbLaps ; i++){
         		path=path+path1((i*4)*radiusIncrement,0);
         		path=path+path2((i*4+1)*radiusIncrement,0);
         		path=path+path3((i*4+2)*radiusIncrement,0);
         		path=path+path4((i*4+3)*radiusIncrement,0);
         	}
 
-        	var offset = (radiusIncrement*4*ecartement);
+        	var offset = (radiusIncrement*4*spacing);
         	path = path +"l "+offset+" 0";
 
         	i=i-1;
@@ -75,12 +123,34 @@
 
         	path=path+"z";
 
-        	return makeSVG('path',{fill:'red',stroke:'black','stroke-width':1,d:path});
+        	return makeSVG('path',{fill:color,stroke:'black','stroke-width':1,d:path});
 
         }
-        var spiral = buildPath(44,2,2,1);
         
-        document.getElementById('s').appendChild(spiral);
+       
+        
+        
+        document.querySelector("form").onsubmit = function (e) {
+            
+            var radiusIncrement = Number(document.formSpiral.radiusIncrement.value);
+            var nbLaps = Number(document.formSpiral.nbLaps.value);
+            var color = document.formSpiral.color.value;
+            var spacing = 1-(Number(document.formSpiral.spacing.value)/100);
+
+
+            buildSVGSpiral(radiusIncrement,nbLaps,spacing,color);
+
+            var svg = document.getElementById("svgContainer").innerHTML;
+            var b64 = btoa(svg);
+            var imgsrc = 'data:image/svg+xml;base64,'+ b64;
+            var img = '<img src="'+imgsrc+'">';
+            
+            document.getElementById("imageContainer").innerHTML =img;
+            
+            return false;
+        }
+        
+        
         
     </script>
 
