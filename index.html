@@ -2,12 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8">
+	<style>
+		svg{
+			border:1px solid black;
 
+		}
+	</style>
 </head>
 
 <body>
     
-    <svg id="s" xmlns="http://www.w3.org/2000/svg" width="400" height="300"/>
+    <svg id="s" xmlns="http://www.w3.org/2000/svg" width="88" height="88"/>
     
     <script type="text/javascript">
         function makeSVG(tag, attrs) {
@@ -17,65 +22,65 @@
             return el;
         }
 
-        function path1(rayon,flag){
-        	var finx=-1*rayon;
-        	var finy=-1*rayon;
-        	return "a "+rayon+" "+rayon+" 0 0 "+flag+" "+finx+" "+finy+" ";
+        function drawArc(radius,flag,endX,endY){
+        	return "a "+radius+" "+radius+" 0 0 "+flag+" "+endX+" "+endY+" ";
         }
-        function path2(rayon,flag){
-        	var finx=-1*rayon;
-        	var finy=+1*rayon;
-        	return "a "+rayon+" "+rayon+" 0 0 "+flag+" "+finx+" "+finy+" ";
+
+        function path1(radius,flag){
+        	var endX=-1*radius;
+        	var endY=-1*radius;
+        	return drawArc(radius,flag,endX,endY);
         }
-        function path3(rayon,flag){
-        	var finx=+1*rayon;
-        	var finy=+1*rayon;
-        	return "a "+rayon+" "+rayon+" 0 0 "+flag+" "+finx+" "+finy+" ";
+        function path2(radius,flag){
+        	var endX=-1*radius;
+        	var endY=+1*radius;
+        	return drawArc(radius,flag,endX,endY);
         }
-        function path4(rayon,flag){
-        	var finx=+1*rayon;
-        	var finy=-1*rayon;
-        	return "a "+rayon+" "+rayon+" 0 0 "+flag+" "+finx+" "+finy+" ";
+        function path3(radius,flag){
+        	var endX=+1*radius;
+        	var endY=+1*radius;
+        	return drawArc(radius,flag,endX,endY);
+        }
+        function path4(radius,flag){
+        	var endX=+1*radius;
+        	var endY=-1*radius;
+        	return drawArc(radius,flag,endX,endY);
         }
 
 
-        function buildPath(pointDepart,rayonIncrement,nbSpires,ecartement){
-        	var path = "M "+pointDepart.x+" "+pointDepart.y+" ";
+       
 
-        	console.log(nbSpires);
+        function buildPath(startPoint,radiusIncrement,nbSpires,ecartement){
+   	
+	       	var path = "M "+startPoint+" "+startPoint+" ";
+
         	for(var i=0; i<nbSpires ; i++){
-        		console.log(i);
-
-        		path=path+path1((i*4)*rayonIncrement,0);
-        		path=path+path2((i*4+1)*rayonIncrement,0);
-        		path=path+path3((i*4+2)*rayonIncrement,0);
-        		path=path+path4((i*4+3)*rayonIncrement,0);
-        		
+        		path=path+path1((i*4)*radiusIncrement,0);
+        		path=path+path2((i*4+1)*radiusIncrement,0);
+        		path=path+path3((i*4+2)*radiusIncrement,0);
+        		path=path+path4((i*4+3)*radiusIncrement,0);
         	}
 
-        	console.log(path);
-
-        	var offset = (rayonIncrement*4*ecartement);
+        	var offset = (radiusIncrement*4*ecartement);
         	path = path +"l "+offset+" 0";
 
         	i=i-1;
 
         	for(i;i>=0;i--){
-        		path=path+path4(-1*((i*4+3)*rayonIncrement+offset),1);
-        		path=path+path3(-1*((i*4+2)*rayonIncrement+offset),1);
-        		path=path+path2(-1*((i*4+1)*rayonIncrement+offset),1);
-        		path=path+path1(-1*((i*4)*rayonIncrement+offset),1);
+        		path=path+path4(-1*((i*4+3)*radiusIncrement+offset),1);
+        		path=path+path3(-1*((i*4+2)*radiusIncrement+offset),1);
+        		path=path+path2(-1*((i*4+1)*radiusIncrement+offset),1);
+        		path=path+path1(-1*((i*4)*radiusIncrement+offset),1);
         	}
 
         	path=path+"z";
-        	console.log(path);
 
         	return makeSVG('path',{fill:'red',stroke:'black','stroke-width':1,d:path});
 
         }
-        var spirale = buildPath({x:200,y:200},2,10,0.6);
+        var spiral = buildPath(44,2,2,1);
         
-        document.getElementById('s').appendChild(spirale);
+        document.getElementById('s').appendChild(spiral);
         
     </script>
 
