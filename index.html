@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <title>SVG Spiral Builder</title>
 	<meta charset="utf-8">
 	<style>
 
@@ -27,20 +28,16 @@
 </head>
 
 <body>
-    
-    
-
     <form name="formSpiral">
         <p><label>Thickness : </label><input name="radiusIncrement" value="5"/></p>
-        <p><label>Nb of laps : </label><input name="nbLaps" value="2"/></p>
-        <p><label>% of spacing : </label><input name="spacing" value="100"/> % </p>
+        <p><label>Nb of laps : </label><input name="nbLaps" value="10"/></p>
+        <p><label>% of spacing : </label><input name="spacing" value="50"/> % </p>
         <p><label>color : </label><input name="color" value="red"/></p>
         <p><input type="submit" value="create spiral"/></p>
     </form>
 
     <div id="svgContainer"></div>
     <div id="imageContainer"></div>
-
     
     <script type="text/javascript">
 
